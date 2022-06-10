@@ -94,7 +94,8 @@ header {
   grid-template-areas:
    "nt mn mn sb . . . ";
   /* background-color: var(--primary); */
-  background: linear-gradient(to left bottom, #67b26f, #4ca2cd);
+  background: rgb(241,228,202);
+  background: linear-gradient(156deg, rgba(241,228,202,1) 0%, rgba(255,0,95,1) 50%, rgba(255,43,43,1) 100%);
   width: 100%;
   margin-bottom: 0px;
 }

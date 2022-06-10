@@ -1,4 +1,3 @@
-# EDA
 import pandas as pd
 import numpy as np
 from random import sample
@@ -8,7 +7,7 @@ import re
 import random
 import pickle
 
-# modelling & evaluation
+# model et évaluation
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.sparse import csr_matrix
 from sklearn.preprocessing import LabelEncoder
@@ -17,11 +16,11 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.utils.extmath import randomized_svd
 from sklearn.metrics import roc_auc_score
 
-# scientific notation off
+# notation scientific
 np.set_printoptions(suppress=True)
 pd.options.display.float_format = '{:.2f}'.format
 
-# load data / global variables
+# data et variable globale
 all_users = pd.read_csv("./data/users/all_users.csv")
 all_users.drop_duplicates(inplace=True)
 all_recipes = pd.read_csv("./data/recipes/all_recipes.csv")
@@ -30,11 +29,7 @@ photo_urls = pd.read_csv("./data/photo_url/photo_urls.csv")
 photo_urls.drop_duplicates(inplace=True)
 recipe_lookup = all_recipes[["recipe_id","title"]]
 
-# Collaborative filtering for those with at least 3 reviews
-# ratings_by_user = all_users.groupby(["user_id","username"])[["rating"]].count().sort_values("rating",ascending=False)
-# at_least_3_ids = list(ratings_by_user[ratings_by_user["rating"]>=3].reset_index().user_id)
-# users3 = all_users[all_users.user_id.isin(at_least_3_ids)][["user_id","recipe_id","rating"]]
-# pickle.dump(users3, open("users3.pkl", "wb"))
+
 users3 = pickle.load(open("./pickle/users3.pkl","rb"))
 
 class utils:
@@ -42,39 +37,27 @@ class utils:
         pass
 
     def get_category(title):
-        '''get_category("Chef John's Chicken Cacciatore")
-        Return multiple categories to ensure it's not too niche'''
         df = all_recipes[["category","title"]]
         my_category = df[df.title == title].category
         categories = ast.literal_eval(my_category.values[0])
         return categories
 
     def recipe_id_to_title(recipe_id):
-        ''' recipe_id_to_title(223042) >>> 'Chicken Parmesan'
-        '''
         df = all_recipes[["recipe_id","title"]]
         my_title = df[df.recipe_id == recipe_id].title
         return my_title.values[0]
 
     def title_to_id(title):
-        ''' title_to_id('Chicken Parmesan') >>> '223042'
-        '''
         df = all_recipes[["recipe_id","title"]]
         my_recipe = df[df.title == title].recipe_id
         return my_recipe.values[0]
 
     def strip_filler(str):
-        '''Remove filler words'''
         stop = ["chef", "john's"]
         words = [i for i in str.split() if i.lower() not in stop]
         return " ".join(words)
 
     def known_positives(user_id,threshold=4,new_user=None):
-        '''Return known positives, by default no new_user input
-        new_user is a dictionary
-
-        {'user_id': [8888888], 'recipe_id': [219936], 'rating': [5]}'''
-
         users = all_users[["user_id","recipe_id","rating"]]
         users = pd.concat([users,pd.DataFrame(new_user)])
 
@@ -84,9 +67,6 @@ class utils:
         return known_positives_list
 
     def create_new_user(quiz_results):
-        '''quiz_results = ['Spicy Chicken Thai Soup']
-        create_new_user(quiz_results)'''
-
         input = [utils.title_to_id(recipe) for recipe in quiz_results]
         new_user_id = [8888888] * len(input)
         new_user_recipe_ids = input
@@ -99,9 +79,6 @@ class utils:
         return new_user
 
     def count_categories(all_recipes_df):
-        ''' Returns a string of all unique categories of recipes
-        count_categories(all_recipes)
-        '''
         all_recipes_df.dropna(axis=0,how='any',inplace=True)
         recipe_categories = all_recipes.drop(["title","category","ingredients"],axis=1)
         categories = []
@@ -116,7 +93,6 @@ class utils:
         return recipe_categories.drop(["calories", "ratings", "reviews", "total_mins"],axis=1)
 
     def get_url(recipe_id):
-        '''url(220854)'''
         try:
             url = photo_urls.query(f'recipe_id=={recipe_id}').photo_url.values[0]
         except: #image does not exist
@@ -124,12 +100,6 @@ class utils:
         return url
 
     def similar_to_cat(categories, top_N=10, all_recipes=all_recipes):
-        '''Return a sample of 6 of the top_N new recipes most similar to the chosen
-        categories
-
-        similar_to_cat(['Main Dish', 'Chicken', 'Chicken Cacciatore'])
-
-        '''
         sample_list = []
         matrix = utils.count_categories(all_recipes)
         for category in categories:
@@ -175,38 +145,17 @@ def create_X(df):
 
 X, user_mapper, recipe_mapper, user_inv_mapper, recipe_inv_mapper = create_X(users3)
 
-# pre-calculate for speed for Heroku website
-
-# 1
-# pickle.dump(similarity_matrix, open("similarity_matrix.pkl", "wb"))
-# similarity_matrix = cosine_similarity(X,X)
-
-# 2
-# recipe_categories = utils.count_categories(all_recipes).iloc[:,1:]
-# A = csr_matrix(recipe_categories)
-# del recipe_categories
-# cosine_sim = cosine_similarity(A, A)
-# pickle.dump(cosine_sim, open("cosine_sim.pkl","wb"))
 
 class recommenders:
     def __init__(self):
         pass
 
     def sample_popular(n=24):
-        '''Return a sample of 12 of top 1000/1000+ recipes'''
         df = all_users[["rating","recipe_id"]].groupby("recipe_id").count().sort_values(by="rating",ascending=False).reset_index()
         top_1000 = [utils.recipe_id_to_title(thing) for thing in df[0:500].recipe_id]
         return sample(top_1000,n)
 
     def user_user_recommender(top_N, user_id, threshold=4, X_sparse=X, user_mapper=user_mapper, recipe_lookup = recipe_lookup, all_users=all_users,new_user=None):
-        '''Return a sample of 6 of top_N new recipes based on similar users
-
-        X: sparse user-item utility matrix, not normalized
-
-        recommenders.user_user_recommender(top_N=20, user_id=3936048)
-
-        '''
-
         similarity_matrix = pickle.load(open("./pickle/similarity_matrix.pkl", "rb"))
         user = user_mapper[user_id]
         # negate for most similar
@@ -230,10 +179,6 @@ class recommenders:
         return sample(set(new_picks),6)
 
     def quiz_user_user_recommender(new_user):
-        '''
-        Accept new user input and applies user_user_recommender function
-        recommenders.quiz_user_user_recommender(utils.create_new_user(quiz_results))'''
-
         pd_new_user = pd.DataFrame(new_user)
         # concat new_user rows
         new_user_df = pd.concat([users3,pd_new_user])
@@ -245,14 +190,6 @@ class recommenders:
 
 
     def item_item_recommender(title, top_N=10, opposite=False, threshold=4, all_recipes=all_recipes, new_user=None, user_id=8888888):
-        '''Return a sample of 6 of top_N new recipes most similar to chosen recipe,
-        by default top_N is 10, so items are very similar. Opposite=False by default.
-
-        recommenders.item_item_recommender(title="Khachapuri (Georgian Cheese Bread)", opposite=True)
-        recommenders.item_item_recommender(title="Khachapuri (Georgian Cheese Bread)", opposite=False)
-        recommenders.item_item_recommender(title="Chef John's Italian Meatballs", new_user=utils.create_new_user(quiz_results))
-        '''
-
         cosine_sim = pickle.load(open("./pickle/cosine_sim.pkl","rb"))
 
         recipe_idx = dict(zip(all_recipes['title'], list(all_recipes.index)))
@@ -278,23 +215,6 @@ class recommenders:
             return sample(new_picks[0:10],6)
 
     def svd_recommender(user_id, new_user=None, threshold=3):
-        '''
-        Returns recommended sample of 6 of the top 10 recipes, over threshold rating for a particular user,
-        using matrix factorization to find latent factors.
-
-        Requires a lot vector to be filled out for non-zero results.
-
-        ELI5: It makes a prediction of the rating (into lower dimensional space)
-
-        top_N: number of similar recipe to retrieve, int | X_norm: user-item utility matrix |  user_id: original user_id, int
-        user_mapper: user_mapper, df | user_preferences: df | threshold = rating threshold between 1 to 5 inclusive
-
-        # existing user
-        recommenders.svd_recommender(3936048)
-
-        # new user
-        recommenders.svd_recommender(8888888, new_user=new_user)
-        '''
         # for new user predictions
         if new_user != None:
             pd_new_user = pd.DataFrame(new_user)
@@ -393,17 +313,6 @@ M_hat = np.dot(U_new,VT_reduced)
 
 ### Ranking Metrics ###
 def precision_and_recall_at_k(predictions, targets, k=6):
-    '''Returns a tuple of (precision, recall) of the top k items
-
-    precision = TP/(TP+FP) -> what fraction of recommended items did the user consume?
-    recall = TP/(TP+FN) -> What out of all the items the user consumed, was recommended?
-
-    precision_and_recall_at_k(list(all_recipes.title.sample(10)), utils.known_positives(3936048),k=6)
-    precision_and_recall_at_k(recommenders.svd_recommender(3936048), utils.known_positives(3936048),k=6)
-    precision_and_recall_at_k(recommenders.user_user_recommender(20,3936048), utils.known_positives(3936048),k=6)
-    precision_and_recall_at_k(recommenders.item_item_recommender("Chef John's Italian Meatballs"), utils.known_positives(3936048),k=6)
-
-    '''
     predictions = predictions[:k]
     num_hit = len(set(predictions).intersection(set(targets)))
     try:
