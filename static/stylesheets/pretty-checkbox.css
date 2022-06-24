@@ -48,6 +48,10 @@
   min-width: calc(1em + 2px);
 }
 
+.fa-2x {
+  font-size: 1.5em !important;
+}
+
 .pretty .state label:before,
 .pretty .state label:after {
   content: '';

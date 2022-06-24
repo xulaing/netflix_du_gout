@@ -5,12 +5,15 @@
   --dark: #686868;
 }
 
-html, body {
-  width: 100vw;
-  min-height: 100vh;
+html,
+body {
+  width: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 0;
-  background: #141414;
+  background-image: url("../background.jpg");
+  background-repeat: no-repeat;
+  background-size: 100%;
   color: var(--light);
   font-family: Helvetica, sans-serif;
   box-sizing: border-box;
@@ -29,13 +32,13 @@ h1 {
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
   text-shadow:
-    -1px 1px 0 black,
-    -2px 2px 0 black,
-    -3px 3px 0 #00A878,
-    -4px 4px 0 black,
-		-5px 5px 0 black;
+    -1px 1px 0 #fea4ae,
+    -2px 2px 0 #9755c3,
+    -3px 3px 0 #ffeb94,
+    -4px 4px 0 #9755c3,
+    -5px 5px 0 #fea4ae;
 
-   margin: 0 0 10px 0;
+  margin: 0 0 10px 0;
 }
 
 h2 {
@@ -43,7 +46,9 @@ h2 {
   text-transform: uppercase;
   font-size: 25px;
   letter-spacing: 0.15em;
-  color: white;
+  color: black;
+  font-weight: 500 !important;
+  /*
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
   text-shadow:
@@ -52,8 +57,16 @@ h2 {
     -3px 3px 0 black,
     -4px 4px 0 black,
     -5px 5px 0 black;
+  */
+  margin: 0 0 10px 0;
+}
 
-   margin: 0 0 10px 0;
+#picks,
+#people,
+#category,
+#quiz_results,
+#tastebreakers {
+  border-bottom: 4px solid #9755c3;
 }
 
 .recipe {
@@ -68,13 +81,42 @@ h2 {
   font-size: 20px;
   letter-spacing: 0.12em;
   color: black;
+  background: var(--light);
+  padding: 10px 20px;
+  border-radius: 20px;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recipe_quiz p {
+  white-space: break-spaces;
+  width: fit-content;
+}
+
+.box.recipe a {
+  background: var(--light);
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  font-size: 20px;
+  letter-spacing: 0.12em;
+  color: black;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  padding: 50px;
 }
 
 .tagline {
   text-transform: uppercase;
   font-size: 18px;
   letter-spacing: 0.12em;
-  color: white;
+  color: black;
 }
 
 .wrapper {
@@ -84,18 +126,18 @@ h2 {
 
 /* HEADER */
 header {
-  padding: 20px 20px 0 20px;
+  padding: 20px 0px 20px 0px;
   position: absolute;
   /* position: fixed; */
   top: 0;
   display: grid;
-  grid-gap:5px;
+  grid-gap: 5px;
   grid-template-columns: 1fr 4fr 1fr;
   grid-template-areas:
-   "nt mn mn sb . . . ";
+    "nt mn mn sb . . . ";
   /* background-color: var(--primary); */
-  background: rgb(241,228,202);
-  background: linear-gradient(156deg, rgba(241,228,202,1) 0%, rgba(255,0,95,1) 50%, rgba(255,43,43,1) 100%);
+  background: rgb(241, 228, 202);
+  background: transparent;
   width: 100%;
   margin-bottom: 0px;
 }
@@ -142,8 +184,8 @@ header {
 }
 
 .sub-nav a {
-  color: var(--light);
-  text-decoration: none;
+  color: black;
+  text-decoration: underline;
   margin: 10px;
 }
 
@@ -158,10 +200,9 @@ header {
 }
 
 .sub-container {
-  padding: 20px;
-  background: var(--light);
+  padding: 20px 0px;
   border-radius: 25px;
-  }
+}
 
 .box {
   display: grid;
@@ -174,10 +215,10 @@ header {
 }
 
 .box a:hover {
-  transition: transform .3s;
-  -ms-transform: scale(1.4);
-  -webkit-transform: scale(1.4);
-  transform: scale(1.4);
+  transition: all .5s ease-in-out;
+  /* -webkit-transform: scale(1.4); */
+  /* transform: scale(1.4); */
+  background-color: #ffeb94;
 }
 
 .box img {
@@ -207,7 +248,7 @@ header {
   text-decoration: underline;
 }
 
-.logos a{
+.logos a {
   padding: 10px;
 
 }
@@ -233,8 +274,8 @@ footer {
     grid-gap: 20px;
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas:
-    "nt nt nt  .  .  . sb . . . "
-    "mn mn mn mn mn mn  mn mn mn mn";
+      "nt nt nt  .  .  . sb . . . "
+      "mn mn mn mn mn mn  mn mn mn mn";
   }
 
 }
@@ -246,8 +287,8 @@ footer {
     grid-gap: 20px;
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas:
-    "nt nt nt  .  .  . sb . . . "
-    "mn mn mn mn mn mn  mn mn mn mn";
+      "nt nt nt  .  .  . sb . . . "
+      "mn mn mn mn mn mn  mn mn mn mn";
   }
 
   .box {
@@ -280,9 +321,9 @@ footer {
     grid-gap: 20px;
     grid-template-columns: repeat(1, 1fr);
     grid-template-areas:
-    "nt"
-    "mn"
-    "sb";
+      "nt"
+      "mn"
+      "sb";
     text-align: center;
   }
 
@@ -359,15 +400,15 @@ footer {
 
 /* quiz */
 #onboarding_header {
-	font-family: Helvetica, sans-serif;
-	font-size: 24px;
-	color: #383838;
+  font-family: Helvetica, sans-serif;
+  font-size: 24px;
+  color: #383838;
 }
 
 #onboarding_subtitle {
-	font-family: Helvetica, sans-serif;
-	font-size: 15px;
-	color: #383838;
+  font-family: Helvetica, sans-serif;
+  font-size: 15px;
+  color: #383838;
 }
 
 #onboarding_submit {
@@ -378,15 +419,15 @@ footer {
   text-transform: uppercase;
   letter-spacing: 2.5px;
   font-weight: 500;
-  color: #FFF;
-  background-color: #00A878;
+  color: black;
+  background-color: #fea4ae;
   border: none;
   border-radius: 5px;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease 0s;
   cursor: pointer;
   outline: none;
-  }
+}
 
 #onboarding_submit:hover {
   background-color: #00A878;
@@ -396,32 +437,33 @@ footer {
 }
 
 .onboarding_selection {
-	width: 5%;
-	height: 5%;
-	background-color: #E0E0E0;
-	position: relative;
+  width: 5%;
+  height: 5%;
+  background-color: #E0E0E0;
+  position: relative;
 }
 
 .onboarding_selection:hover {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .onboarding_selection_description {
-	font-family: Helvetica, sans-serif;
-  	font-size: 13px;
-  	color: white;
-  	position: absolute;
-  	bottom: -13px;
-  	left: 0;
-	width: 560px;
-	background: rgb(0, 0, 0); /* fallback color */
-	background: rgba(0, 0, 0, 0.7);
-	padding: 5px;
+  font-family: Helvetica, sans-serif;
+  font-size: 13px;
+  color: white;
+  position: absolute;
+  bottom: -13px;
+  left: 0;
+  width: 560px;
+  background: rgb(0, 0, 0);
+  /* fallback color */
+  background: rgba(0, 0, 0, 0.7);
+  padding: 5px;
 }
 
 .onboarding_checkmark {
-	position: absolute;
-	z-index: 100;
-	left: 32%;
-	top: 35%;
+  position: absolute;
+  z-index: 100;
+  left: 32%;
+  top: 35%;
 }

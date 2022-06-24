@@ -4,59 +4,50 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <!-- checkbox -->
     <link href="{{ url_for('static',filename='stylesheets/pretty-checkbox.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
         integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-    <!-- main css -->
     <link href="{{ url_for('static',filename='stylesheets/seasoning_style.css') }}" rel="stylesheet">
 
     <link rel="shortcut icon" href="/static/avocado.jpg" type="image/x-icon">
     <title>LULU & CECE</title>
-    <!-- favicon -->
     <link rel="shortcut icon" href="./static/images/avocado.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"
         integrity="sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9"
         crossorigin="anonymous"></script>
     <script src="main.js"></script>
-
 </head>
 
 <body>
 
     <div class="wrapper">
-
-        <!-- HEADER -->
         <header>
             <div class="logo">
                 <h1> LULU&CECE </h1>
                 <div class="tagline"> Le Netflix du goût 🥑</div>
             </div>
-
             <nav class="sub-nav tagline">
                 <a href="/">Nouvel utilisateur</a>
             </nav>
         </header>
-        <!-- END OF HEADER -->
 
-        <!-- MAIN CONTAINER -->
         <section class="main-container">
             <div class="location" id="home">
                 <br>
                 <br>
-                <h2 size="6"> Choisissez <font color=#FF0054> 5 </font> recettes que vous aimez (et pas moins ;)) <i
-                        class="icon fas fa-heart"></i> <br><br>
-                    Découvrez de <b>
-                        <font color=#FF0054> nouvelles </font>
-                    </b> recette et enjoy ! </h2>
+                <h2 size="6"> Choisissez <font color=#9755c3> 5 </font> recettes que vous aimez (et pas moins ;)) <i
+                        class="icon fas fa-heart"></i> <br>
+                    Découvrez de
+                    <font color=#9755c3> nouvelles </font>
+                    recette et enjoy !
+                </h2>
 
                 <br>
                 <br>
                 <form method="POST" action="/">
                     <!-- row 1 -->
                     <div class="box sub-container">
-                        <!-- this is one checkbox -->
                         <div class="recipe_quiz">
 
                             <p>{{most_popular[0][0]}}</p>
@@ -161,13 +152,9 @@
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+
                     <!-- row 2 -->
                     <div class="box sub-container">
-                        <!-- this is one checkbox -->
                         <div class="recipe_quiz">
 
                             <p>{{most_popular[0][6]}}</p>
@@ -271,10 +258,7 @@
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+
                     <!-- row 3 -->
                     <div class="box sub-container">
                         <div class="recipe_quiz">
@@ -380,10 +364,7 @@
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+
                     <!-- row 4 -->
                     <div class="box sub-container">
                         <div class="recipe_quiz">
@@ -489,16 +470,14 @@
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
 
-                    <!-- validate that at least 6 selections are made -->
-                    <input type="submit" id="onboarding_submit" value="Laissez opérer la magie !">
+
+                    <!-- validate that at least 5 selections are made -->
+                    <div class="center">
+                        <input type="submit" id="onboarding_submit" value="En cuisine !">
+                    </div>
                 </form>
             </div>
-            <!-- END OF MAIN CONTAINER -->
     </div>
 
 </body>
